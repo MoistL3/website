@@ -1,0 +1,322 @@
+/* ==========================================================================
+   Portfolio page: style.css
+   Targets semantic tags (header, nav, main, section, article, table, footer)
+   so it works without adding classes. Uses logical properties, so it also
+   works if you switch the page to dir="rtl".
+   ========================================================================== */
+
+/* ---------- 1. Design tokens ---------- */
+:root {
+  --bg: #0c1224;
+  --surface: #141c38;
+  --surface-2: #1b2447;
+  --border: #29346a;
+  --text: #e2e7f7;
+  --muted: #94a0c8;
+  --accent: #8b9bff;      /* links, table headers, article rule */
+  --highlight: #f2b45c;   /* hover, focus, row labels */
+
+  --font-sans: system-ui, -apple-system, "Segoe UI", Tahoma, Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Consolas, "Cascadia Code", monospace;
+
+  --radius: 6px;
+  --measure: 68ch;
+  --page-width: 72rem;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f5f6fb;
+    --surface: #ffffff;
+    --surface-2: #eceffa;
+    --border: #cfd5ec;
+    --text: #182042;
+    --muted: #55608a;
+    --accent: #3b4bd6;
+    --highlight: #b26a00;
+    color-scheme: light;
+  }
+}
+
+/* ---------- 2. Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font: 1rem/1.7 var(--font-sans);
+}
+
+h1, h2, h3, h4 {
+  line-height: 1.2;
+  margin: 2rem 0 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: clamp(2rem, 1rem + 5vw, 3.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-top: 0;
+}
+
+h2 { font-size: clamp(1.4rem, 1rem + 2vw, 1.9rem); }
+h3 { font-size: 1.25rem; }
+
+p {
+  margin: 0 0 1em;
+}
+
+strong {
+  font-weight: 650;
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+a:hover {
+  color: var(--highlight);
+}
+
+:focus-visible {
+  outline: 2px solid var(--highlight);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
+
+ul, ol {
+  padding-inline-start: 1.4rem;
+}
+
+li::marker {
+  color: var(--highlight);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--surface-2);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin-block: 2rem;
+}
+
+/* ---------- 3. Page layout ---------- */
+header,
+main,
+footer {
+  width: min(100% - 2 * var(--gutter), var(--page-width));
+  margin-inline: auto;
+}
+
+main {
+  flex: 1;
+}
+
+main section {
+  padding-block: clamp(2rem, 6vw, 4rem);
+}
+
+/* ---------- 4. Header & navigation ---------- */
+header {
+  padding-block: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.75rem;
+}
+
+nav a {
+  color: var(--muted);
+  text-decoration: none;
+  padding-block: 0.25rem;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+nav a:hover,
+nav a[aria-current="page"] {
+  color: var(--text);
+  border-bottom-color: var(--highlight);
+}
+
+/* ---------- 5. Article ---------- */
+article {
+  max-width: var(--measure);
+  margin-block: 1.5rem;
+  padding-inline-start: 1.25rem;
+  border-inline-start: 3px solid var(--accent);
+}
+
+article > :first-child {
+  margin-top: 0;
+}
+
+article > :last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- 6. Skills table ---------- */
+table {
+  width: 100%;
+  margin-block: 1.5rem;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+th,
+td {
+  min-width: 11rem;
+  padding: 0.85rem 1rem;
+  text-align: start;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+
+thead th {
+  color: var(--accent);
+  font-weight: 650;
+  white-space: nowrap;
+  border-bottom: 2px solid var(--accent);
+}
+
+/* Row labels ("My Strength", "How I Use Them") stay visible while scrolling */
+thead th:first-child,
+tbody th[scope="row"] {
+  position: sticky;
+  inset-inline-start: 0;
+  min-width: 0;
+  background: var(--bg);
+}
+
+tbody th[scope="row"] {
+  color: var(--highlight);
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+/* Many columns: let the table scroll sideways instead of breaking the page */
+@media (max-width: 64rem) {
+  table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
+/* ---------- 7. Forms ---------- */
+label {
+  display: block;
+  margin: 1rem 0 0.35rem;
+  font-weight: 600;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  max-width: 34rem;
+  padding: 0.65rem 0.8rem;
+  font: inherit;
+  color: inherit;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--accent);
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  width: auto;
+}
+
+button,
+input[type="submit"] {
+  margin-top: 1.25rem;
+  padding: 0.7rem 1.4rem;
+  font: inherit;
+  font-weight: 600;
+  color: var(--bg);
+  background: var(--accent);
+  border: 0;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+button:hover,
+input[type="submit"]:hover {
+  background: var(--highlight);
+}
+
+/* ---------- 8. Footer ---------- */
+footer {
+  padding-block: 1.5rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ---------- 9. Small screens ---------- */
+@media (max-width: 40rem) {
+  th,
+  td {
+    padding: 0.7rem 0.75rem;
+  }
+
+  article {
+    padding-inline-start: 1rem;
+  }
+}
+
+/* ---------- 10. Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
